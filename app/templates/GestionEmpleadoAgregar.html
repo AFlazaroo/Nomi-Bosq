@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar Empleado{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Agregar Nuevo Empleado</h1>
+<form action="/empleados/agregar" method="post">
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="apellido" class="form-label">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="cedula" class="form-label">Cédula:</label>
+        <input type="text" id="cedula" name="cedula" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="correo" class="form-label">Correo Electrónico:</label>
+        <input type="email" id="correo" name="correo" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="direccion" class="form-label">Dirección:</label>
+        <input type="text" id="direccion" name="direccion" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="cargo" class="form-label">Cargo:</label>
+        <div class="input-group">
+            <select id="cargo" name="cargo" class="form-select" required>
+                {% for c in cargos %}
+                    <option value="{{ c }}">{{ c }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" class="btn btn-secondary" onclick="agregarCargo()">Agregar Cargo</button>
+        </div>
+    </div>
+    
+
+    <div class="mb-3">
+        <label for="salario" class="form-label">Salario:</label>
+        <input type="number" id="salario" name="salario" step="0.01" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">Agregar Empleado</button>
+    <button  href="gestion_empleados" type="submit" class="btn btn-success">Regresar</button>
+</form>
+
+<script>
+    function agregarCargo() {
+        const nuevoCargo = prompt("Ingrese el nuevo cargo:");
+        if (nuevoCargo) {
+            const select = document.getElementById("cargo");
+            const option = document.createElement("option");
+            option.value = nuevoCargo;
+            option.textContent = nuevoCargo;
+            select.appendChild(option);
+            select.value = nuevoCargo; 
+        }
+    }
+</script>
+{% endblock %}
