@@ -32,3 +32,15 @@ END;
 //
 
 DELIMITER ;
+
+--Procedimiento para obtener un empleado por su ID
+DELIMITER //
+
+CREATE PROCEDURE obtener_empleado_por_id (
+    IN p_id_empleado INT
+)
+BEGIN
+    SELECT * FROM empleados WHERE id_empleado = p_id_empleado;
+END //
+
+DELIMITER ;

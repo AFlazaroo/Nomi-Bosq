@@ -76,11 +76,66 @@ def pt_crear_empleado():
 
 @empleado_bp.route('/editar/<int:id>', methods=['GET', 'POST'])
 def pt_editar_empleado(id):
-    empleado = Empleado.query.get_or_404(id)
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    #Traer datos del empleado para editar
+    cursor.callproc('obtener_empleado_por_id', (id,))
+    empleado = None
+
+    for result in cursor.stored_results():
+        row = result.fetchone()
+        if row:
+            empleado = {
+                'id_empleado': row[0],
+                'email': row[1],
+                'nombre': row[2],
+                'fecha_nacimiento': row[3],
+                'telefono': row[4],
+                'estado_civil': row[5],
+                'genero': row[6],
+                'n_documento': row[7],
+                'cargo': row[8],
+                'estado': row[9],
+                'direccion': row[10],
+                'fecha_ingreso': row[11]
+            }
+
+    print(f'Empleado = {empleado}')
+
+    # Traer datos de contrato para editar
+    cursor.callproc('obtener_contrato_por_id_empleado', (id,))
+    contrato = None
+
+    for result in cursor.stored_results():
+        row = result.fetchone()
+        if row:
+            contrato = {
+                'id_contrato': row[0],
+                'salario_bruto': row[1],
+                'tipo': row[2],
+                'horario': row[3],
+                'fecha_inicio': row[4],
+                'fecha_fin': row[5],
+                'id_empleado': row[6]
+            }
+
+    print(f'Contrato = {contrato}')
+
+    # Traer datos de cargos
+    cursor.callproc('obtener_cargos')
+    cargos = []
+    for result in cursor.stored_results():
+        cargos = [row[0] for row in result.fetchall()]
+    
+    print(f'Cargos = {cargos}')
+    cursor.close()
+    conn.close()
+
     if request.method == 'POST':
         # Aquí irá la lógica para actualizar el empleado
         pass
-    return render_template('empleados/GestionEmpleadoEditar.html', empleado=empleado)
+    return render_template('empleados/GestionEmpleadoEditar.html', empleado=empleado, contrato=contrato, cargos=cargos)
 
 @empleado_bp.route('/eliminar/<int:id>', methods=['POST'])
 def pt_eliminar_empleado(id):
