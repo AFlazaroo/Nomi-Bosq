@@ -72,7 +72,7 @@ def pt_crear_empleado():
             cursor.close()
             conn.close()
 
-    return render_template('empleados/GestionEmpleadoAgregar.html', cargos=cargos)
+    return render_template('empleados/GestionEmpleadoAgregar.html', cargo=cargos)
 
 @empleado_bp.route('/editar/<int:id>', methods=['GET', 'POST'])
 def pt_editar_empleado(id):

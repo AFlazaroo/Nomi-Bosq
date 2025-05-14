@@ -40,17 +40,76 @@
                                 <input type="tel" class="form-control" id="telefono" name="telefono">
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="cargo" class="form-label">Cargo</label>
-                                <input type="text" class="form-control" id="cargo" name="cargo" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
-                                <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" required>
+                        
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cargo" class="form-label">Cargo</label>
+                            <div class="input-group">
+                                <select class="form-select" id="cargo" name="cargo" required>
+                                    {% for cargo in cargos %}
+                                        <option value="{{ cargo }}">{{ cargo }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="button" class="btn btn-outline-secondary" id="addCargoBtn">Agregar</button>
                             </div>
                         </div>
+
+                        <!-- Modal for adding a new cargo -->
+                        <div class="modal fade" id="addCargoModal" tabindex="-1" aria-labelledby="addCargoModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addCargoModalLabel">Agregar Nuevo Cargo</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="newCargo" class="form-label">Nuevo Cargo</label>
+                                        <input type="text" class="form-control" id="newCargo" placeholder="Escriba el nuevo cargo">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" id="saveCargoBtn">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Show modal on button click
+                            document.getElementById('addCargoBtn').addEventListener('click', function () {
+                                const modal = new bootstrap.Modal(document.getElementById('addCargoModal'));
+                                modal.show();
+                            });
+
+                            // Save new cargo and add to the select dropdown
+                            document.getElementById('saveCargoBtn').addEventListener('click', function () {
+                                const newCargo = document.getElementById('newCargo').value.trim();
+                                if (newCargo) {
+                                    const cargoSelect = document.getElementById('cargo');
+                                    const newOption = document.createElement('option');
+                                    newOption.value = newCargo;
+                                    newOption.textContent = newCargo;
+                                    cargoSelect.appendChild(newOption);
+                                    cargoSelect.value = newCargo; // Select the newly added cargo
+                                    bootstrap.Modal.getInstance(document.getElementById('addCargoModal')).hide();
+                                }
+                            });
+
+                            // Validate phone number length
+                            document.getElementById('telefono').addEventListener('input', function () {
+                                this.setCustomValidity(this.value.length >= 10 ? '' : 'El número de teléfono debe tener al menos 10 dígitos.');
+                            });
+
+                            // Validate contract end date
+                            document.getElementById('fecha_fin').addEventListener('change', function () {
+                                const fechaInicio = document.getElementById('fecha_inicio').value;
+                                if (fechaInicio && this.value < fechaInicio) {
+                                    this.setCustomValidity('La fecha de finalización no puede ser anterior a la fecha de inicio.');
+                                } else {
+                                    this.setCustomValidity('');
+                                }
+                            });
+                        </script>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
