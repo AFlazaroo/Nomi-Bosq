@@ -1,5 +1,20 @@
-/app/__pycache__/.*
-/app/Controllers/__pycache__/*.*
-/app/Models/__pycache__/*.*
+# Ignorar cachés de Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
 
-/venv
+# Ignorar entorno virtual
+venv/
+
+# Ignorar configuraciones de entorno (opcional)
+.env
+*.env
+
+# Ignorar archivos temporales de editores
+*.swp
+*.swo
+*.bak
+*~
+
+# VSCode settings (opcional)
+.vscode/
