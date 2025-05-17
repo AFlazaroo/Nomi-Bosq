@@ -46,7 +46,7 @@
                             <label for="cargo" class="form-label">Cargo</label>
                             <div class="input-group">
                                 <select class="form-select" id="cargo" name="cargo" required>
-                                    {% for cargo in cargos %}
+                                    {% for cargo in cargo %}
                                         <option value="{{ cargo }}">{{ cargo }}</option>
                                     {% endfor %}
                                 </select>

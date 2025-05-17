@@ -17,7 +17,7 @@
 
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form action="{{ url_for('empleado_bp.pt_crear_empleado') }}" method="POST" class="card shadow-sm">
+                <form action="{{ url_for('empleado_bp.pt_editar_empleado', id=empleado.id_empleado) }}" method="POST" class="card shadow-sm">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -46,7 +46,7 @@
                             <label for="cargo" class="form-label">Cargo</label>
                             <div class="input-group">
                                 <select class="form-select" id="cargo" name="cargo" required>
-                                    <option value="{{empleado.cargo}}" disabled selected>{{empleado.cargo}}</option>
+                                    <option value="{{empleado.cargo}}" selected>{{empleado.cargo}}</option>
                                     {% for cargo in cargos %}
                                         <option value="{{ cargo }}">{{ cargo }}</option>
                                     {% endfor %}
@@ -126,8 +126,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="genero" class="form-label">Género</label>
                                 <select class="form-select" id="genero" name="genero">
-                                    <option value="{{ empleado.genero if empleado else '' }}" disabled selected>{{ empleado.genero if empleado else 'Seleccione...' }}</option>
-                                    <option value="">Seleccione...</option>
+                                    <option value="{{ empleado.genero if empleado else '' }}" selected>{{ empleado.genero if empleado else ' ' }}</option>
                                     <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
                                     <option value="O">Otro</option>
@@ -139,7 +138,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="estado_civil" class="form-label">Estado Civil</label>
                                 <select class="form-select" id="estado_civil" name="estado_civil">
-                                    <option value="{{ empleado.estado_civil if empleado else '' }}" disabled selected>{{ empleado.estado_civil if empleado else 'Seleccione...' }}</option>
+                                    <option value="{{ empleado.estado_civil if empleado else '' }}" selected>{{ empleado.estado_civil if empleado else ' ' }}</option>
                                     <option value="Soltero">Soltero(a)</option>
                                     <option value="Casado">Casado(a)</option>
                                     <option value="Divorciado">Divorciado(a)</option>
@@ -169,8 +168,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="tipo" class="form-label">Tipo de Contrato</label>
                                 <select class="form-select" id="tipo" name="tipo" required value="{{contrato.tipo if contrato else ''}}">
-                                    <option value="{{contrato.tipo if contrato else ''}}" disabled selected>{{contrato.tipo if contrato else 'Seleccione...'}}</option>
-                                    <option value="">Seleccione...</option>
+                                    <option value="{{contrato.tipo if contrato else ''}}" selected>{{contrato.tipo if contrato else ' '}}</option>
                                     <option value="Fijo">Contrato Fijo</option>
                                     <option value="Temporal">Contrato Temporal</option>
                                     <option value="Prestación">Contrato de Prestación de Servicios</option>
@@ -182,7 +180,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="horario" class="form-label">Horario</label>
                                 <select class="form-select" id="horario" name="horario" required>
-                                    <option value="{{ contrato.horario if contrato else '' }}" disabled selected>{{ contrato.horario if contrato else 'Seleccione...' }}</option>
+                                    <option value="{{ contrato.horario if contrato else '' }}" selected>{{ contrato.horario if contrato else ' ' }}</option>
                                     <option value="Diurno">Diurno</option>
                                     <option value="Nocturno">Nocturno</option>
                                     <option value="Mixto">Mixto</option>
