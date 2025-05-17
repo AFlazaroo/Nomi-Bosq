@@ -8,20 +8,24 @@ from app import get_connection
 
 empleado_bp = Blueprint('empleado_bp', __name__, url_prefix='/inicio/gestion_empleados')
 
+#End point gestion de empleados
 @empleado_bp.route('/')
 def pt_gestion_empleado():
     empleados = Empleado.query.all()
     return render_template('empleados/GestionEmpleado.html', empleados=empleados)
 
+#End point crear empleado y contrato
 @empleado_bp.route('/crear_empleado', methods=['GET', 'POST'])
 def pt_crear_empleado():
     conn = get_connection()
     cursor = conn.cursor()
     cursor.callproc('obtener_cargos')
 
-    cargos = []
+    cargo = []
     for result in cursor.stored_results():
-        cargos = [row[0] for row in result.fetchall()]
+        cargo = [row[0] for row in result.fetchall()]
+
+    print(f'Cargos = {cargo}')
 
     cursor.close()
     conn.close()
@@ -38,7 +42,7 @@ def pt_crear_empleado():
         cargo = request.form['cargo']
         estado = True
         direccion = request.form['direccion']
-        fecha_ingreso = request.form['fecha_ingreso']
+        fecha_ingreso = request.form['fecha_inicio']
 
         # Datos del formulario contrato
         salario_bruto = request.form['salario_bruto']
@@ -72,8 +76,9 @@ def pt_crear_empleado():
             cursor.close()
             conn.close()
 
-    return render_template('empleados/GestionEmpleadoAgregar.html', cargo=cargos)
+    return render_template('empleados/GestionEmpleadoAgregar.html', cargo=cargo)
 
+#End point para editar empleado y contrato
 @empleado_bp.route('/editar/<int:id>', methods=['GET', 'POST'])
 def pt_editar_empleado(id):
     conn = get_connection()
@@ -133,12 +138,90 @@ def pt_editar_empleado(id):
     conn.close()
 
     if request.method == 'POST':
-        # Aquí irá la lógica para actualizar el empleado
-        pass
+        print('Recibiendo datos del formulario para editar empleado y contrato')
+        #Abrir conexion de nuevo
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # Recoger datos del formulario empleado
+        nombre = request.form['nombre']
+        n_documento = request.form['n_documento']
+        email = request.form['email']
+        telefono = request.form['telefono']
+        cargo = request.form['cargo']
+        fecha_ingreso = request.form['fecha_ingreso']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+        genero = request.form['genero']
+        estado_civil = request.form['estado_civil']
+        estado = int(request.form['estado'])
+        direccion = request.form['direccion']
+
+        print(f'Datos empleado = {nombre}, {n_documento}, {email}, {telefono}, {cargo}, {fecha_ingreso}, {fecha_nacimiento}, {genero}, {estado_civil}, {estado}, {direccion}')
+
+        # Recoger datis del formulario contrato
+        salario_bruto = float(request.form['salario_bruto'])
+        tipo = request.form['tipo']
+        horario = request.form['horario']
+        fecha_inicio = request.form['fecha_inicio']
+        fecha_fin = request.form['fecha_fin'] or None
+
+        print(f'Datos contrato = {salario_bruto}, {tipo}, {horario}, {fecha_inicio}, {fecha_fin}')
+
+        # Ejecutar procedimiento para actualizar empleado
+        cursor.callproc('actualizar_empleado', (
+                    id, nombre, n_documento, email, telefono, cargo,
+                    fecha_ingreso, fecha_nacimiento, genero, estado_civil,
+                    estado, direccion
+        ))
+
+        # Ejecutar procedimiento para actualizar contrato
+        cursor.callproc('actualizar_contrato', (
+                    contrato['id_contrato'], salario_bruto, tipo, horario,
+                    fecha_inicio, fecha_fin
+        ))
+
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('empleado_bp.pt_gestion_empleado'))
+
+        
     return render_template('empleados/GestionEmpleadoEditar.html', empleado=empleado, contrato=contrato, cargos=cargos)
 
 @empleado_bp.route('/eliminar/<int:id>', methods=['POST'])
 def pt_eliminar_empleado(id):
-    empleado = Empleado.query.get_or_404(id)
-    # Aquí irá la lógica para eliminar el empleado
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    try:
+        # Eliminamos contrato del empleado
+        cursor.callproc('eliminar_contrato_por_empleado', (id,))
+        contrato_eliminado = 0
+        for result in cursor.stored_results():
+            contrato_eliminado = result.fetchone()[0]
+        
+        # Cambiamos el estado de empleado a inactivo
+        cursor.callproc('desactivar_empleado', (id,))
+        empleado_desactivado = 0
+        for result in cursor.stored_results():
+            empleado_desactivado = result.fetchone()[0]
+        
+        if contrato_eliminado >= 0 and empleado_desactivado > 0:
+            conn.commit()
+            print('Empleado desactivado y contrato eliminado correctamente')
+        else:
+            conn.rollback()
+            print('No se pudo completar la operación')
+            
+    except Exception as e:
+        conn.rollback()
+        print(f'Error al eliminar: {str(e)}')
+        print(f"Error en eliminación lógica: {str(e)}")
+        
+    finally:
+        cursor.close()
+        conn.close()
+    
     return redirect(url_for('empleado_bp.pt_gestion_empleado'))

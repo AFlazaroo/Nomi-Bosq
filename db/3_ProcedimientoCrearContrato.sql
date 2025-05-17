@@ -30,3 +30,10 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE eliminar_contrato_por_empleado(IN p_id_empleado INT)
+BEGIN
+    DELETE FROM contrato WHERE id_empleado = p_id_empleado;
+    SELECT ROW_COUNT() AS filas_afectadas;
+END //
+DELIMITER ;
