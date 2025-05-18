@@ -8,6 +8,9 @@ from app import get_connection
 
 empleado_bp = Blueprint('empleado_bp', __name__, url_prefix='/inicio/gestion_empleados')
 
+
+#APARTADO PRINCIPAL DE EMPLEADOS
+
 #End point gestion de empleados
 @empleado_bp.route('/')
 def pt_gestion_empleado():

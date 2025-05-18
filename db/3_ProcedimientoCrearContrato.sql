@@ -37,3 +37,16 @@ BEGIN
     SELECT ROW_COUNT() AS filas_afectadas;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE obtener_contratos()
+BEGIN
+    SELECT *
+    FROM 
+        Contrato c
+    JOIN 
+        Empleado e ON c.id_empleado = e.id_empleado
+    ORDER BY 
+        c.fecha_inicio DESC;
+END //
+DELIMITER ;
