@@ -29,7 +29,6 @@ def pt_gestion_contratos():
 
     return render_template('contratos/GestionContrato.html', contratos=contratos)
 
-
 # Nuevo endpoint para eliminar contrato
 @contrato_bp.route('/eliminar/<int:id>', methods=['POST'])
 def pt_eliminar_contrato(id):
