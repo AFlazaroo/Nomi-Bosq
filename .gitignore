@@ -1,7 +1,20 @@
-# Ignorar cachés de Python
-__pycache__/
-*.py[cod]
-*$py.class
+# Ignorar todos los pycache específicamente
+app/**/__pycache__/
+app/__pycache__/
+app/Controllers/__pycache__/
+app/Models/__pycache__/
+**/**.pyc
+**/**.pyo
+**/**.pyd
+app/**/*.cpython-313.pyc
+app/Controllers/__pycache__/*.cpython-313.pyc
+app/Models/__pycache__/*.cpython-313.pyc
+
+# Archivos específicos que están causando conflictos
+app/Controllers/__pycache__/empleado_controller.cpython-313.pyc
+app/Controllers/__pycache__/liquidacion_controller.cpython-313.pyc
+app/Models/__pycache__/Empleado.cpython-313.pyc
+app/__pycache__/__init__.cpython-313.pyc
 
 # Ignorar entorno virtual
 venv/
