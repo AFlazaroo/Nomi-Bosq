@@ -28,32 +28,3 @@ def pt_gestion_contratos():
         conn.close()
 
     return render_template('contratos/GestionContrato.html', contratos=contratos)
-
-# Nuevo endpoint para eliminar contrato
-@contrato_bp.route('/eliminar/<int:id>', methods=['POST'])
-def pt_eliminar_contrato(id):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    try:
-        print(f'Intentando eliminar contrato con ID: {id}')
-        cursor.callproc('eliminar_contrato', (id,))
-        eliminado = 0
-
-        for result in cursor.stored_results():
-            eliminado = result.fetchone()[0]
-
-        if eliminado > 0:
-            conn.commit()
-            print('Contrato eliminado exitosamente')
-        else:
-            conn.rollback()
-            print('El procedimiento no eliminó ningún contrato')
-    except Exception as e:
-        conn.rollback()
-        print(f'Error al eliminar contrato: {str(e)}')
-    finally:
-        cursor.close()
-        conn.close()
-
-    return redirect(url_for('contrato_bp.pt_gestion_contratos'))

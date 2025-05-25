@@ -50,3 +50,5 @@ BEGIN
         c.fecha_inicio DESC;
 END //
 DELIMITER ;
+
+DELIMITER //

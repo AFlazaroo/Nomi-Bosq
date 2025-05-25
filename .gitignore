@@ -1,52 +1,37 @@
-# Ignorar todos los pycache específicamente
-app/**/__pycache__/
-app/__pycache__/
-app/Controllers/__pycache__/
-app/Models/__pycache__/
-**/**.pyc
-**/**.pyo
-**/**.pyd
-app/**/*.cpython-313.pyc
-app/Controllers/__pycache__/*.cpython-313.pyc
-app/Models/__pycache__/*.cpython-313.pyc
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pyc
 
-# Archivos específicos que están causando conflictos
-app/Controllers/__pycache__/empleado_controller.cpython-313.pyc
-app/Controllers/__pycache__/liquidacion_controller.cpython-313.pyc
-app/Models/__pycache__/Empleado.cpython-313.pyc
-app/__pycache__/__init__.cpython-313.pyc
-
-# Ignorar entorno virtual
+# Entorno virtual
 venv/
 env/
 ENV/
 .env
 *.env
 
-# Ignorar archivos temporales de editores
+# IDEs y editores
+.vscode/
+.idea/
 *.swp
 *.swo
-*.bak
 *~
 
-# VSCode settings
-.vscode/
-
-# PyCharm settings
-.idea/
-
-# Archivos de distribución/compilación
+# Distribución / empaquetado
 dist/
 build/
 *.egg-info/
 
-# Archivos de base de datos SQLite (si los usas)
+# Base de datos
 *.db
 *.sqlite3
 
-# Archivos de log
+# Logs
 *.log
 
-# Archivos del sistema operativo
+# Sistema operativo
 .DS_Store
 Thumbs.db 
