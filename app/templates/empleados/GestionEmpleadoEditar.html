@@ -17,36 +17,37 @@
 
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form action="{{ url_for('empleado_bp.pt_crear_empleado') }}" method="POST" class="card shadow-sm">
+                <form action="{{ url_for('empleado_bp.pt_editar_empleado', id=empleado.id_empleado) }}" method="POST" class="card shadow-sm">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nombre" class="form-label">Nombre Completo</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ empleado.nombre if empleado else '' }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="n_documento" class="form-label">Número de Documento</label>
-                                <input type="text" class="form-control" id="n_documento" name="n_documento" required>
+                                <input type="text" class="form-control" id="n_documento" name="n_documento" value="{{ empleado.n_documento if empleado else '' }}" required>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="email" class="form-label">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ empleado.email if empleado else '' }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="telefono" class="form-label">Teléfono</label>
-                                <input type="tel" class="form-control" id="telefono" name="telefono">
+                                <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ empleado.telefono if empleado else '' }}">
                             </div>
                         </div>
-                        
-                    <div class="row">
+
+                        <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="cargo" class="form-label">Cargo</label>
                             <div class="input-group">
                                 <select class="form-select" id="cargo" name="cargo" required>
-                                    {% for cargo in cargo %}
+                                    <option value="{{empleado.cargo}}" selected>{{empleado.cargo}}</option>
+                                    {% for cargo in cargos %}
                                         <option value="{{ cargo }}">{{ cargo }}</option>
                                     {% endfor %}
                                 </select>
@@ -111,15 +112,21 @@
                             });
                         </script>
 
+                        <div class="col-md-6 mb-3">
+                                <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
+                                <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" value="{{ empleado.fecha_ingreso if empleado else '' }}" required>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
-                                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ empleado.fecha_nacimiento if empleado else '' }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="genero" class="form-label">Género</label>
                                 <select class="form-select" id="genero" name="genero">
-                                    <option value="">Seleccione...</option>
+                                    <option value="{{ empleado.genero if empleado else '' }}" selected>{{ empleado.genero if empleado else ' ' }}</option>
                                     <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
                                     <option value="O">Otro</option>
@@ -131,7 +138,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="estado_civil" class="form-label">Estado Civil</label>
                                 <select class="form-select" id="estado_civil" name="estado_civil">
-                                    <option value="">Seleccione...</option>
+                                    <option value="{{ empleado.estado_civil if empleado else '' }}" selected>{{ empleado.estado_civil if empleado else ' ' }}</option>
                                     <option value="Soltero">Soltero(a)</option>
                                     <option value="Casado">Casado(a)</option>
                                     <option value="Divorciado">Divorciado(a)</option>
@@ -149,19 +156,19 @@
 
                         <div class="mb-3">
                             <label for="direccion" class="form-label">Dirección</label>
-                            <input type="text" class="form-control" id="direccion" name="direccion">
+                            <input type="text" class="form-control" id="direccion" name="direccion" value="{{ empleado.direccion if empleado else '' }}">
                         </div>
 
                         <h4 class="mt-4 mb-3">Información del Contrato</h4>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="salario_bruto" class="form-label">Salario Bruto</label>
-                                <input type="number" class="form-control" id="salario_bruto" name="salario_bruto" required>
+                                <input type="number" class="form-control" id="salario_bruto" name="salario_bruto" value="{{ contrato.salario_bruto if contrato else '' }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="tipo" class="form-label">Tipo de Contrato</label>
-                                <select class="form-select" id="tipo" name="tipo" required>
-                                    <option value="">Seleccione...</option>
+                                <select class="form-select" id="tipo" name="tipo" required value="{{contrato.tipo if contrato else ''}}">
+                                    <option value="{{contrato.tipo if contrato else ''}}" selected>{{contrato.tipo if contrato else ' '}}</option>
                                     <option value="Fijo">Contrato Fijo</option>
                                     <option value="Temporal">Contrato Temporal</option>
                                     <option value="Prestación">Contrato de Prestación de Servicios</option>
@@ -173,7 +180,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="horario" class="form-label">Horario</label>
                                 <select class="form-select" id="horario" name="horario" required>
-                                    <option value="">Seleccione...</option>
+                                    <option value="{{ contrato.horario if contrato else '' }}" selected>{{ contrato.horario if contrato else ' ' }}</option>
                                     <option value="Diurno">Diurno</option>
                                     <option value="Nocturno">Nocturno</option>
                                     <option value="Mixto">Mixto</option>
@@ -181,13 +188,13 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
-                                <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                                <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" value="{{ contrato.fecha_inicio if contrato else '' }}" required>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="fecha_fin" class="form-label">Fecha de Finalización</label>
-                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin">
+                            <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" value="{{ contrato.fecha_fin if contrato else 'Sin fecha fin.' }}">
                             <small class="form-text text-muted">Dejar en blanco si es contrato indefinido</small>
                         </div>
 
@@ -196,7 +203,7 @@
                                 <i class="bi bi-arrow-left"></i> Volver
                             </a>
                             <button type="submit" class="btn btn-success">
-                                <i class="bi bi-save"></i> Guardar Empleado
+                                <i class="bi bi-save"></i>Actualizar
                             </button>
                         </div>
                     </div>
@@ -208,3 +215,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+</a>

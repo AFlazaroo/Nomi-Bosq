@@ -23,12 +23,15 @@ def create_app():
     # 👇 Importar los controladores dentro de la función create_app
     from app.Controllers.empleado_controller import empleado_bp  # Importa el Blueprint directamente
     from app.Controllers import liquidacion_controller  # Importa el controlador de liquidación
+    from app.Controllers.contrato_controller import contrato_bp  # Importa el controlador de contrato
 
     # Registrar los blueprints con el prefijo de URL adecuado
     print("🧩 Registrando blueprint para empleados...")
     app.register_blueprint(empleado_bp)  # Ya tiene su propio url_prefix
     print("🧩 Registrando blueprint para liquidaciones...")
     app.register_blueprint(liquidacion_controller.liquidacion_bp, url_prefix='/api')
+    print("🧩 Registrando blueprint para contratos...")
+    app.register_blueprint(contrato_bp)  # Ya tiene su propio url_prefix
 
     # Mostrar las rutas disponibles para verificar que todo esté registrado correctamente
     print("\n🔍 Rutas disponibles:")
@@ -43,6 +46,6 @@ def get_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="12345678",
+        password="1074129082",
         database="Nomina_ProyectoFinalBD"
     )
