@@ -1,26 +1,20 @@
+# Ignorar cachés de Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
 
-# Entorno virtual
+# Ignorar entorno virtual
 venv/
-ENV/
-env/
-.venv/
 
-# Archivos de Python cache
-app/__pycache__/.*
-app/Controllers/__pycache__/.*
-aoop/Models/__pycache__/.*
+# Ignorar configuraciones de entorno (opcional)
+.env
+*.env
 
-*.py[cod]
-*$py.class
+# Ignorar archivos temporales de editores
+*.swp
+*.swo
+*.bak
+*~
 
-# Archivos del sistema
-.DS_Store
-Thumbs.db
-
-# Archivos de logs y base de datos temporal
-*.log
-*.sqlite3
-
-# Archivos de configuración del editor
+# VSCode settings (opcional)
 .vscode/
-.idea/
